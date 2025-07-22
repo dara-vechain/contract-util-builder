@@ -1,0 +1,20 @@
+{
+  "name": "hardhat-project",
+  "scripts": {
+    "deploy:local": "hardhat run scripts/deploy-verify-mock.ts --network vechain_solo",
+    "deploy:testnet": "hardhat run scripts/deploy-verify-mock.ts --network vechain_testnet",
+    "deploy:local:script": "hardhat run scripts/$npm_config_script.ts --network vechain_solo",
+    "deploy:testnet:script": "hardhat run scripts/$npm_config_script.ts --network vechain_testnet",
+    "compile": "hardhat compile",
+    "test": "hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@vechain/hardhat-vechain": "^0.1.9",
+    "@vechain/sdk-hardhat-plugin": "^1.1.0",
+    "hardhat": "2.22.15"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}
