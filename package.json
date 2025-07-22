@@ -1,10 +1,10 @@
 {
   "name": "hardhat-project",
   "scripts": {
-    "deploy:local": "hardhat run scripts/deploy-verify-mock.ts --network vechain_solo",
-    "deploy:testnet": "hardhat run scripts/deploy-verify-mock.ts --network vechain_testnet",
-    "deploy:local:script": "hardhat run scripts/$npm_config_script.ts --network vechain_solo",
-    "deploy:testnet:script": "hardhat run scripts/$npm_config_script.ts --network vechain_testnet",
+    "deploy:local:vetdomain-mock": "hardhat run scripts/deploy-verify-mock.ts --network vechain_solo",
+    "deploy:testnet:vetdomain-mock": "hardhat run scripts/deploy-verify-mock.ts --network vechain_testnet",
+    "deploy:local:b3tr-round": "hardhat run scripts/deploy-b3tr-round.ts --network vechain_solo",
+    "deploy:testnet:b3tr-round": "hardhat run scripts/deploy-b3tr-round.ts --network vechain_testnet",
     "compile": "hardhat compile",
     "test": "hardhat test"
   },
