@@ -167,4 +167,11 @@ interface IXAllocationPool {
         uint256 roundId,
         bytes32 appId
     ) external view returns (bool);
+
+    /**
+     * @dev Claim the rewards for a given round and app
+     * @param roundId The round ID
+     * @param appId The ID of the app
+     */
+    function claim(uint256 roundId, bytes32 appId) external;
 }

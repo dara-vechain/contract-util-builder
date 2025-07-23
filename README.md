@@ -18,14 +18,29 @@ yarn deploy:testnet:b3tr-round
 
 ### `B3trRound` Contract
 
-The `B3trRound` contract provides essential functionality for managing allocation rounds and distributing rewards. It offers several utility functions to streamline the process of starting new rounds and handling allocations.
+Testnet Contract Address: `0xbc2a439075ec290fffcf082ac4baaf841f45a4db`
+
+The **B3trRound** contract provides essential functionality for managing allocation rounds and distributing rewards. It offers several utility functions to streamline the process of starting new rounds and handling allocations.
 
 Key functions include:
 
-```
+```shell
+# This return an array of application IDs that have pending claim and non-zero rewards based on the specified round ID.
 function getUnclaimedXAppsWithNonZeroAmounts(uint256 roundId) public view returns (bytes32[] memory)
 
+# This specifically targets the previous round for convenience after a new round has started.
 function getUnclaimedXAppsWithNonZeroAmountsForPreviousRound() public view returns (bytes32[] memory)
 ```
 
-These functions return an array of application IDs that have pending, non-zero rewards based on the specified round ID. The second function specifically targets the previous round for convenience after a new round has started.
+Main function include:
+
+```shell
+function startNewRoundAndDistributeAllocations()
+```
+
+This function starts a new round and distribute allocations for the previous round.
+
+### Bugs
+
+1. Any write function that calls another contract is failing **silently**: Try `startNewRoundAndDistributeAllocations` and `getUnclaimedXAppsWithNonZeroAmounts`
+2. Both `getUnclaimedXAppsWithNonZeroAmounts` and `getUnclaimedXAppsWithNonZeroAmountsForPreviousRound` are not working but the **only** the second one is reverting

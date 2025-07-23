@@ -4,6 +4,7 @@ pragma solidity 0.8.20;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import "./interfaces/IXAllocationPool.sol";
 import "./interfaces/IXAllocationVotingGovernor.sol";
@@ -16,12 +17,29 @@ import "./interfaces/IEmissions.sol";
  * This contract provides utility functions to check which X-Apps are eligible for allocations but haven't claimed them yet.
  * This contract is upgradeable using the UUPS proxy pattern.
  */
-contract B3trRound is Initializable, OwnableUpgradeable, UUPSUpgradeable {
+contract B3trRound is
+    Initializable,
+    OwnableUpgradeable,
+    UUPSUpgradeable,
+    ReentrancyGuard
+{
     // Contract addresses
     IXAllocationPool public xAllocationPool;
     IXAllocationVotingGovernor public xAllocationVoting;
     IX2EarnApps public x2EarnApps;
     IEmissions public emissions;
+
+    /**
+     * @dev Event emitted when allocations are claimed for multiple app IDs in a batch.
+     * @param roundId The round ID for which allocations were claimed
+     * @param appIds Array of app IDs for which allocations were claimed
+     * @param caller The address that triggered this operation
+     */
+    event BatchAllocationsClaimed(
+        uint256 indexed roundId,
+        bytes32[] appIds,
+        address indexed caller
+    );
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -246,6 +264,61 @@ contract B3trRound is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         returns (bytes32[] memory)
     {
         return getUnclaimedXAppsWithNonZeroAmounts(getPreviousRoundId());
+    }
+
+    /**
+     * @dev Claims allocations for all unclaimed X-Apps with non-zero amounts for a specific round.
+     * @param roundId The round ID to claim allocations for
+     * @return claimedAppIds Array of X-App IDs for which allocations were claimed
+     */
+    function claimAllocationsForRound(
+        uint256 roundId
+    ) public nonReentrant returns (bytes32[] memory claimedAppIds) {
+        bytes32[]
+            memory appsWithNonZeroAmounts = getUnclaimedXAppsWithNonZeroAmounts(
+                roundId
+            );
+
+        for (uint256 i = 0; i < appsWithNonZeroAmounts.length; i++) {
+            try xAllocationPool.claim(roundId, appsWithNonZeroAmounts[i]) {
+                // Claim successful, do nothing
+            } catch {
+                // Claim failed
+                revert("Claim failed");
+            }
+        }
+
+        emit BatchAllocationsClaimed(
+            roundId,
+            appsWithNonZeroAmounts,
+            msg.sender
+        );
+        return appsWithNonZeroAmounts;
+    }
+
+    /**
+     * @dev Claims allocations for all unclaimed X-Apps with non-zero amounts for the previous round.
+     */
+    function claimAllocationsForPreviousRound() public nonReentrant {
+        uint256 prevRoundId = getPreviousRoundId();
+        require(prevRoundId > 0, "No previous round exists");
+        claimAllocationsForRound(prevRoundId);
+    }
+
+    /**
+     * @dev Starts a new round and distributes allocations for the previous round.
+     */
+    function startNewRoundAndDistributeAllocations() public {
+        // Start a new round
+        (bool success, ) = address(emissions).call(
+            abi.encodeWithSignature("distribute()")
+        );
+        require(success, "Failed to start new round");
+
+        // Distribute allocations for the previous round
+        // if (success) {
+        //     claimAllocationsForPreviousRound();
+        // }
     }
 
     /**
