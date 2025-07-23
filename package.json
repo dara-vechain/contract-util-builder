@@ -5,8 +5,7 @@
     "deploy:testnet:vetdomain-mock": "hardhat run scripts/deploy-verify-mock.ts --network vechain_testnet",
     "deploy:local:b3tr-round": "hardhat run scripts/deploy-b3tr-round.ts --network vechain_solo",
     "deploy:testnet:b3tr-round": "hardhat run scripts/deploy-b3tr-round.ts --network vechain_testnet",
-    "compile": "hardhat compile",
-    "test": "hardhat test"
+    "compile": "hardhat compile"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",

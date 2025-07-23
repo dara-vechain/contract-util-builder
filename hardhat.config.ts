@@ -5,6 +5,9 @@ import "@vechain/hardhat-vechain";
 import { HardhatUserConfig } from "hardhat/config";
 import * as dotenv from "dotenv";
 
+// Import tasks
+import "./tasks/b3tr-round-tasks";
+
 dotenv.config();
 
 const config: HardhatUserConfig = {

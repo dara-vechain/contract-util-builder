@@ -40,6 +40,25 @@ function startNewRoundAndDistributeAllocations()
 
 This function starts a new round and distribute allocations for the previous round.
 
+## Contract Interactions
+
+### Hardhat Tasks
+
+The project includes Hardhat tasks for interacting with the B3trRound contract:
+
+```shell
+# Get the current round ID
+npx hardhat round:current --network vechain_solo
+
+# Get unclaimed X-Apps for a specific round
+npx hardhat apps:unclaimed --round-id 5 --network vechain_solo
+
+# Claim allocations for a specific round
+npx hardhat claim:round --round-id 5 --network vechain_solo
+```
+
+For more details, see the [tasks README](./tasks/README.md).
+
 ### Bugs
 
 1. Any write function that calls another contract is failing **silently**: Try `startNewRoundAndDistributeAllocations` and `getUnclaimedXAppsWithNonZeroAmounts`

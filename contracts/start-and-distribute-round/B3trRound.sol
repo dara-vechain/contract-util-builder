@@ -310,15 +310,7 @@ contract B3trRound is
      */
     function startNewRoundAndDistributeAllocations() public {
         // Start a new round
-        (bool success, ) = address(emissions).call(
-            abi.encodeWithSignature("distribute()")
-        );
-        require(success, "Failed to start new round");
-
-        // Distribute allocations for the previous round
-        // if (success) {
-        //     claimAllocationsForPreviousRound();
-        // }
+        emissions.distribute();
     }
 
     /**
