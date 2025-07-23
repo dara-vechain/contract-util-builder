@@ -20,7 +20,7 @@ yarn deploy:testnet:b3tr-round
 
 Testnet Contract Address: `0xbc2a439075ec290fffcf082ac4baaf841f45a4db`
 
-The **B3trRound** contract provides essential functionality for managing allocation rounds and distributing rewards. It offers several utility functions to streamline the process of starting new rounds and handling allocations.
+The **B3trRound** contract provides some utils for managing allocation rounds and distributing rewards.
 
 Key functions include:
 
