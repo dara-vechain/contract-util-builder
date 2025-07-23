@@ -43,4 +43,4 @@ This function starts a new round and distribute allocations for the previous rou
 ### Bugs
 
 1. Any write function that calls another contract is failing **silently**: Try `startNewRoundAndDistributeAllocations` and `getUnclaimedXAppsWithNonZeroAmounts`
-2. Both `getUnclaimedXAppsWithNonZeroAmounts` and `getUnclaimedXAppsWithNonZeroAmountsForPreviousRound` are not working but the **only** the second one is reverting
+2. Both `getUnclaimedXAppsWithNonZeroAmounts` and `getUnclaimedXAppsWithNonZeroAmountsForPreviousRound` are not working but **only** the second one is reverting
